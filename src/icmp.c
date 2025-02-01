@@ -18,8 +18,8 @@ void create_icmp_packet(t_ping *ping, char *packet)
 
     icmp_header->type = ICMP_ECHO;
     icmp_header->code = 0;
-    icmp_header->un.echo.id = htons(ping->identifiant);
-    icmp_header->un.echo.sequence = htons(ping->sequence++);
+    icmp_header->un.echo.id = htons(ping->id);
+    icmp_header->un.echo.sequence = htons(ping->seq++);
     icmp_header->checksum = 0;
 
     memset(packet + sizeof(struct icmphdr), 'a', ping->data_size);
@@ -32,7 +32,7 @@ int unpack_icmp_packet(char *buffer, int size, t_ping *ping, struct timeval recv
     struct iphdr *ip_header = (struct iphdr *)buffer;
     struct icmphdr *icmp_header = (struct icmphdr *)(buffer + (ip_header->ihl * 4));
 
-    if (icmp_header->type == ICMP_ECHOREPLY && icmp_header->un.echo.id == htons(ping->identifiant))
+    if (icmp_header->type == ICMP_ECHOREPLY && icmp_header->un.echo.id == htons(ping->id))
     {
         long double rtt = (recv_time.tv_sec - ping->time_start.tv_sec) * 1000.0 + (recv_time.tv_usec - ping->time_start.tv_usec) / 1000.0;
         int seq = ntohs(icmp_header->un.echo.sequence);

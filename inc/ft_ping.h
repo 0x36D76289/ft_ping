@@ -29,8 +29,8 @@ typedef struct s_ping
     int sockfd;
     struct sockaddr_in dest_addr;
     char *hostname;
-    int identifiant;
-    int sequence;
+    int id;
+    int seq;
     int ttl;
     int data_size;
     t_options options;

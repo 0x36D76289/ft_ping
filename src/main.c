@@ -23,8 +23,8 @@ void signal_handler(int sig)
 
 int main(int argc, char **argv)
 {
-    g_ping.identifiant = getpid();
-    g_ping.sequence = 0;
+    g_ping.id = getpid();
+    g_ping.seq = 0;
     g_ping.ttl = DEFAULT_TTL;
     g_ping.data_size = DEFAULT_DATA_SIZE;
     g_ping.options.verbose = false;
