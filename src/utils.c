@@ -1,18 +1,26 @@
-#include "../inc/ft_ping.h"
+#include "../include/utils.h"
 
-void set_addrinfo(t_ping *ping)
+unsigned short checksum(unsigned short *addr, int len)
 {
-    struct addrinfo hints, *result;
-    memset(&hints, 0, sizeof(hints));
-    hints.ai_family = AF_INET;
+    int nleft = len;
+    int sum = 0;
+    unsigned short *w = addr;
+    unsigned short answer = 0;
 
-    int status = getaddrinfo(ping->hostname, NULL, &hints, &result);
-    if (status != 0)
+    while (nleft > 1)
     {
-        fprintf(stderr, "ft_ping: %s: %s\n", ping->hostname, gai_strerror(status));
-        exit(2);
+        sum += *w++;
+        nleft -= 2;
     }
 
-    ping->dest_addr = *(struct sockaddr_in *)result->ai_addr;
-    freeaddrinfo(result);
+    if (nleft == 1)
+    {
+        *(unsigned char *)(&answer) = *(unsigned char *)w;
+        sum += answer;
+    }
+
+    sum = (sum >> 16) + (sum & 0xffff);
+    sum += (sum >> 16);
+    answer = ~sum;
+    return answer;
 }
