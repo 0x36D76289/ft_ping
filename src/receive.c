@@ -3,7 +3,7 @@
 
 void receive_packet(t_ping *ping)
 {
-    char buffer[PACKET_SIZE + sizeof(struct ip)]; // Account for IP header
+    char buffer[PACKET_SIZE + sizeof(struct ip)];
     struct sockaddr_in sender_addr;
     socklen_t sender_addr_len = sizeof(sender_addr);
     struct timeval recv_time;
@@ -17,9 +17,7 @@ void receive_packet(t_ping *ping)
     if (bytes_received < 0)
     {
         if (errno == EAGAIN || errno == EWOULDBLOCK)
-        {
-            return; // Timeout.
-        }
+            return; 
         else
         {
             perror("ft_ping: recvfrom");
@@ -28,7 +26,7 @@ void receive_packet(t_ping *ping)
     }
 
     struct ip *ip_hdr = (struct ip *)buffer;
-    struct icmphdr *icmp_hdr = (struct icmphdr *)(buffer + (ip_hdr->ip_hl << 2)); // Skip IP header
+    struct icmphdr *icmp_hdr = (struct icmphdr *)(buffer + (ip_hdr->ip_hl << 2));
 
     char sender_ip_str[INET_ADDRSTRLEN];
     inet_ntop(AF_INET, &(sender_addr.sin_addr), sender_ip_str, INET_ADDRSTRLEN);
@@ -48,7 +46,6 @@ void receive_packet(t_ping *ping)
     }
     else if (ping->verbose)
     {
-        // Handle other ICMP messages in verbose mode
         printf("Received ICMP message from %s: type=%d, code=%d\n",
                sender_ip_str, icmp_hdr->type, icmp_hdr->code);
     }
