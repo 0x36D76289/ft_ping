@@ -6,7 +6,7 @@ void parse_args(int argc, char **argv, t_ping *ping)
     int opt;
 
     ping->verbose = false;
-    ping->ttl = 64; // Default TTL
+    ping->ttl = 64;
     ping->seq_num = 0;
     ping->packets_sent = 0;
     ping->packets_received = 0;
@@ -41,8 +41,8 @@ void resolve_hostname(t_ping *ping)
     struct addrinfo hints, *result, *rp;
     int s;
     memset(&hints, 0, sizeof(struct addrinfo));
-    hints.ai_family = AF_INET;    // Allow only IPv4
-    hints.ai_socktype = SOCK_RAW; // Raw socket for ICMP
+    hints.ai_family = AF_INET;    // IPv4
+    hints.ai_socktype = SOCK_RAW; // ICMP
     hints.ai_protocol = IPPROTO_ICMP;
 
     s = getaddrinfo(ping->hostname, NULL, &hints, &result);
@@ -52,7 +52,6 @@ void resolve_hostname(t_ping *ping)
         exit(EXIT_FAILURE);
     }
 
-    // Iterate through results and take the first valid IPv4 address
     for (rp = result; rp != NULL; rp = rp->ai_next)
     {
         if (rp->ai_family == AF_INET)
