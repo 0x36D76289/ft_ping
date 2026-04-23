@@ -25,7 +25,6 @@ void set_socket_options(t_ping *ping)
     timeout.tv_sec = MAX_WAIT_TIME;
     timeout.tv_usec = 0;
 
-    // Set receive timeout
     if (setsockopt(ping->sockfd, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout)) < 0)
     {
         perror("ft_ping: setsockopt (SO_RCVTIMEO)");
@@ -52,7 +51,7 @@ void handle_signal(int sig)
 {
     if (sig == SIGINT)
     {
-        print_stats(&g_ping); // Access global ping struct
+        print_stats(&g_ping);
         close(g_ping.sockfd);
         exit(EXIT_SUCCESS);
     }
