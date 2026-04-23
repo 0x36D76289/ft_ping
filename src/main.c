@@ -3,7 +3,7 @@
 #include "../include/send.h"
 #include "../include/receive.h"
 
-t_ping g_ping; // Global to be accessible by signal handler
+t_ping g_ping;
 
 int main(int argc, char **argv)
 {
@@ -19,7 +19,7 @@ int main(int argc, char **argv)
     gettimeofday(&g_ping.start_time, NULL);
     signal(SIGINT, handle_signal);
     signal(SIGALRM, handle_signal);
-    alarm(1); // first alarm
+    alarm(1);
 
     ft_ping_loop();
     return 0;
